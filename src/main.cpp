@@ -16,9 +16,9 @@ int main() {
     // Day 2a
     string path = "../data/inp_d2.txt";
     auto result = day2a(path);
-    print("Result: {}\n", result);
+    print("Result day 2a: {}\n", result);
 
     // Day 2b
-    
+    print("Result day 2b: {}\n", day2b(path));
     return 0;
 }

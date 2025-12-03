@@ -6,10 +6,13 @@
 
 using namespace std;
 
-auto computer(vector<int>& intcode){
+auto computer(vector<int>& intcode,int noun, int verb){
     int ptr = 0;
     int opcode, param1, param2, dest;
     const size_t N = intcode.size();
+
+    intcode[1]=noun;
+    intcode[2]=verb;
 
     auto bad_access = [&](const string& reason) {
         ostringstream os;
@@ -26,7 +29,7 @@ auto computer(vector<int>& intcode){
         dest = intcode[ptr + 3];
 
         if (opcode==99){
-            return intcode;
+            return intcode[0];
         }
 
         if (ptr >= N) bad_access("instruction pointer out of range (ptr >= size)");
