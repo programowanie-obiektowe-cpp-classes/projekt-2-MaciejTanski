@@ -17,7 +17,7 @@ using namespace std;
 
 int main() {
      // Day 2a
-    /* string path = "../data/inp_d2.txt";
+    string path = "../data/inp_d2.txt";
     auto result = day2a(path);
     print("Result day 2a: {}\n", result);//odp 3101878
 
@@ -27,17 +27,15 @@ int main() {
     // Day 5a
     auto path5 = "../data/inp_d5.txt";
     day5a(path5);//odp 13787043
- */
-    //day5b("../data/inp_d5.txt"); //odp 3892695
+
+    day5b(path5); //odp 3892695
 
     // Day 9a
-    day9tests();
+    //day9tests();
 
     day9a();// odp 3638931938
 
     // day 9b
-    
+    day9b();// odp 86025
     return 0;
-
-
 }

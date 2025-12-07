@@ -120,7 +120,7 @@ auto computer(vector<long long>& intcode,long long noun, long long verb){
             default:
                 throw runtime_error("Unknown opcode: " + to_string(opcode));
         }
-        print("DEBUG: ptr={}, opcode={}, modes=({}, {}, {}), param1={}, param2={}, dest={}\n", ptr, opcode, a, b, c, param1, param2, dest);
+        //print("DEBUG: ptr={}, opcode={}, modes=({}, {}, {}), param1={}, param2={}, dest={}\n", ptr, opcode, a, b, c, param1, param2, dest);
   
         //wyjatki
         if (ptr >= intcode.size()) bad_access("instruction pointer out of range (ptr >= size)");

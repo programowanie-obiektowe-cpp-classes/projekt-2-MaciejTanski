@@ -39,3 +39,12 @@ void day9a(){
     print("!!!!!Dzien 9a - Podaj input 1!!!!!\n");
     auto result = computer(intcode,intcode[1],intcode[2]);
 }
+
+void day9b(){
+
+    string fileContent = readFile("../data/inp_d9a.txt");
+    auto intcode = intcodeParser(fileContent);
+
+    print("!!!!!Dzien 9b - Podaj input 2!!!!!\n");
+    auto result = computer(intcode,intcode[1],intcode[2]);
+}
