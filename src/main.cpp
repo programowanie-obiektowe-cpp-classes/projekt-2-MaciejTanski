@@ -15,18 +15,19 @@ using namespace std;
 
 int main() {
      // Day 2a
-    //string path = "../data/inp_d2.txt";
-    //auto result = day2a(path);
-    //print("Result day 2a: {}\n", result);
+    /* string path = "../data/inp_d2.txt";
+    auto result = day2a(path);
+    print("Result day 2a: {}\n", result);//odp 3101878
 
     // Day 2b
-    //print("Result day 2b: {}\n", day2b(path));
+    print("Result day 2b: {}\n", day2b(path));//odp 8444
 
     // Day 5a
-    auto path5a = "../data/inp_d5.txt";
-    auto result5a = day5a(path5a);
-    print("Result day 5a: {}\n", result5a);
-
+    auto path5 = "../data/inp_d5.txt";
+    day5a(path5);//odp 13787043
+ */
+    day5b("../data/inp_d5.txt");
+    
     return 0;
 
 

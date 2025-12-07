@@ -5,13 +5,21 @@
 #include "Computer.hpp"
 using namespace std;
 
-auto day5a(const string path){
+void day5a(const string path){
 
     string fileContent = readFile(path);
     auto intcode = intcodeParser(fileContent);
 
+    intcode[10]=04;
     //print("{}",intcode);
     auto result = computer(intcode,intcode[1],intcode[2]);
+}
 
-    return result;
+auto day5b(const string path){
+
+    string fileContent = readFile(path);
+    auto intcode = intcodeParser(fileContent);
+
+    auto result = computer(intcode,intcode[1],intcode[2]);
+
 }

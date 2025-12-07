@@ -24,17 +24,7 @@ T wczytaj(const std::string& komunikat) {
     return wartosc;
 }
 
-int parameter(const int mode,const int pointer, const vector<int>& intcode,const int opcode){
-
-    if (opcode==3 && mode != 0) {
-        return intcode[pointer];
-        //throw runtime_error("Invalid mode for opcode 3");
-    }
-    
-    if (opcode==4 && mode != 0) {
-        return intcode[pointer];
-        //throw runtime_error("Invalid mode for opcode 4");
-    }
+int parameter(int mode,const int pointer, const vector<int>& intcode){
 
     switch(mode){
         default:
@@ -76,20 +66,27 @@ auto computer(vector<int>& intcode,int noun, int verb){
         b=(full_opcode/1000)%10;
         c=(full_opcode/100)%10;
         
-        print("DEBUG: Decoded opcode {} into {}, modes=({}, {}, {})\n", intcode[ptr], opcode, a, b, c);
+        //print("DEBUG: Decoded opcode {} into {}, modes=({}, {}, {})\n", intcode[ptr], opcode, a, b, c);
 
-        param1 = parameter(c, ptr + 1, intcode, opcode);
-        param2 = parameter(b, ptr + 2, intcode, opcode);
-        dest =intcode[ptr + 3]; //parameter(a, ptr + 3, intcode, opcode);
+        if ((opcode == 3) && c == 1){
+            throw runtime_error("Destination parameter cannot be in immediate mode");
+            //c=0; //tryb dla parametru input/output musi byc zawsze 0
+            //print("ATTENTION\n Computer read opcode {} in immediate mode\n Changing to position mode\n\n",opcode);
+        }
+        param1 = parameter(c, ptr + 1, intcode);
+        param2 = parameter(b, ptr + 2, intcode);
+        if (a == 1)
+            throw runtime_error("Destination parameter cannot be in immediate mode");
+        dest = parameter(a, ptr + 3, intcode);
 
-        print("DEBUG: ptr={}, opcode={}, modes=({}, {}, {}), param1={}, param2={}, dest={}\n", ptr, opcode, a, b, c, param1, param2, dest);
+        //print("DEBUG: ptr={}, opcode={}, modes=({}, {}, {}), param1={}, param2={}, dest={}\n", ptr, opcode, a, b, c, param1, param2, dest);
   
         //wyjatki
         if (ptr >= N) bad_access("instruction pointer out of range (ptr >= size)");
         //if (c==0 && ((param1) >= static_cast<int>(N) || param1 < 0)) bad_access("param1 index out of range: " + to_string(param1));
         //if (b==0 && ((param2) >= static_cast<int>(N) || param2 < 0)) bad_access("param2 index out of range: " + to_string(param2));
         //if (a==0 && ((dest) >= static_cast<int>(N) || dest < 0)) bad_access("dest index out of range: " + to_string(dest));
-
+        
         switch(opcode){
 
             default:
@@ -112,17 +109,33 @@ auto computer(vector<int>& intcode,int noun, int verb){
                 ptr += 2;
                 break;
             case 4:
-                print("DEBUG: Outputting value at {}, value={}\n", param1, intcode[param1]);
+                //print("DEBUG: Outputting value at {}, value={}\n", param1, intcode[param1]);
                 print("output: {}\n", intcode[param1]);
                 ptr += 2;
                 break;
-
+            case 5:
+                if(intcode[param1]) ptr = intcode[param2];
+                else ptr +=3;
+                break;
+            case 6:
+                if(!intcode[param1]) ptr = intcode[param2];
+                else ptr +=3;
+                break;
+            case 7:
+                intcode[dest] = (intcode[param1] < intcode[param2]) ? 1 : 0;
+                ptr += 4;
+                break;
+            case 8:
+                intcode[dest] = (intcode[param1] == intcode[param2]) ? 1 : 0;
+                ptr += 4;
+                break;
+            
         }
         full_opcode = intcode[ptr];
         opcode=full_opcode%100;
     }
 
-    print("DEBUG: Halting program.\n");
+    //print("DEBUG: Halting program.\n");
     //Sleep(1);
     return intcode[0];
 
