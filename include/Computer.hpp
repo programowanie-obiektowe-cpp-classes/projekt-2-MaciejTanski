@@ -2,13 +2,58 @@
 #include <vector>
 #include <stdexcept>
 #include <sstream>
-
+#include <iostream>
+#include <print>
+#include <windows.h>
 
 using namespace std;
+
+template<typename T>
+T wczytaj(const std::string& komunikat) {
+    T wartosc;
+   
+    std::print("{}",komunikat);
+
+    while (!(std::cin >> wartosc)) {
+        std::cin.clear();
+        std::cin.ignore(1000, '\n');
+        std::println("Wrong input type:");
+        std::print("{}", komunikat);
+    }
+    std::print("\n");
+    return wartosc;
+}
+
+int parameter(const int mode,const int pointer, const vector<int>& intcode,const int opcode){
+
+    if (opcode==3 && mode != 0) {
+        return intcode[pointer];
+        //throw runtime_error("Invalid mode for opcode 3");
+    }
+    
+    if (opcode==4 && mode != 0) {
+        return intcode[pointer];
+        //throw runtime_error("Invalid mode for opcode 4");
+    }
+
+    switch(mode){
+        default:
+            throw runtime_error("Unknown mode");
+            
+        case 0:
+            return intcode[pointer];
+
+        case 1:
+            return pointer;
+    }
+
+}
 
 auto computer(vector<int>& intcode,int noun, int verb){
     int ptr = 0;
     int opcode, param1, param2, dest;
+    int a,b,c,d,e;
+
     const size_t N = intcode.size();
 
     intcode[1]=noun;
@@ -19,38 +64,70 @@ auto computer(vector<int>& intcode,int noun, int verb){
         os << "Intcode error: " << reason << "\n";
         os << "ptr=" << ptr << " size=" << N << "\n";
         if (ptr < N) os << "opcode at ptr = " << intcode[ptr] << "\n";
+        os<< "modes=(" << a << "," << b << "," << c << ")\n";
         throw runtime_error(os.str());
     };
 
-    while(true){
-        opcode = intcode[ptr];
-        param1 = intcode[ptr + 1];
-        param2 = intcode[ptr + 2];
-        dest = intcode[ptr + 3];
+    int full_opcode = intcode[ptr];
+    opcode=full_opcode%100;
+    while(opcode!=99){
 
-        if (opcode==99){
-            return intcode[0];
-        }
+        a=full_opcode/10000;
+        b=(full_opcode/1000)%10;
+        c=(full_opcode/100)%10;
+        
+        print("DEBUG: Decoded opcode {} into {}, modes=({}, {}, {})\n", intcode[ptr], opcode, a, b, c);
 
+        param1 = parameter(c, ptr + 1, intcode, opcode);
+        param2 = parameter(b, ptr + 2, intcode, opcode);
+        dest =intcode[ptr + 3]; //parameter(a, ptr + 3, intcode, opcode);
+
+        print("DEBUG: ptr={}, opcode={}, modes=({}, {}, {}), param1={}, param2={}, dest={}\n", ptr, opcode, a, b, c, param1, param2, dest);
+  
+        //wyjatki
         if (ptr >= N) bad_access("instruction pointer out of range (ptr >= size)");
-        if (param1 < 0 || param2 < 0 || dest < 0) bad_access("parameter index negative");
-        if (static_cast<size_t>(param1) >= N) bad_access("param1 index out of range: " + to_string(param1));
-        if (static_cast<size_t>(param2) >= N) bad_access("param2 index out of range: " + to_string(param2));
-        if (static_cast<size_t>(dest) >= N) bad_access("dest index out of range: " + to_string(dest));
+        //if (c==0 && ((param1) >= static_cast<int>(N) || param1 < 0)) bad_access("param1 index out of range: " + to_string(param1));
+        //if (b==0 && ((param2) >= static_cast<int>(N) || param2 < 0)) bad_access("param2 index out of range: " + to_string(param2));
+        //if (a==0 && ((dest) >= static_cast<int>(N) || dest < 0)) bad_access("dest index out of range: " + to_string(dest));
 
         switch(opcode){
 
             default:
-                throw std::runtime_error("Unknown opcode");
+                throw std::runtime_error("Unknown opcode" + to_string(opcode));
 
             case 1:
+                //print("DEBUG: Adding {} and {}, storing at {}\n", intcode[param1], intcode[param2], dest);
                 intcode[dest] = intcode[param1] + intcode[param2];
+                
+                ptr += 4;
                 break;
             case 2:
+                //print("DEBUG: Multiplying {} and {}, storing at {}\n", intcode[param1], intcode[param2], dest);
                 intcode[dest] = intcode[param1] * intcode[param2];
+                
+                ptr += 4;
                 break;
+            case 3:
+                intcode[param1] = wczytaj<int>("Podaj input: "); 
+                ptr += 2;
+                break;
+            case 4:
+                print("DEBUG: Outputting value at {}, value={}\n", param1, intcode[param1]);
+                print("output: {}\n", intcode[param1]);
+                ptr += 2;
+                break;
+
         }
-        ptr += 4;
+        full_opcode = intcode[ptr];
+        opcode=full_opcode%100;
     }
 
+    print("DEBUG: Halting program.\n");
+    //Sleep(1);
+    return intcode[0];
+
+
 }
+
+    
+    

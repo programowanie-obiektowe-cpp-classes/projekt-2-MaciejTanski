@@ -10,15 +10,24 @@
 #include "FileReader.hpp"
 #include "IntcodeParser.hpp"
 #include "Day2.hpp"
+#include "Day5.hpp"
 using namespace std;
 
 int main() {
-    // Day 2a
-    string path = "../data/inp_d2.txt";
-    auto result = day2a(path);
-    print("Result day 2a: {}\n", result);
+     // Day 2a
+    //string path = "../data/inp_d2.txt";
+    //auto result = day2a(path);
+    //print("Result day 2a: {}\n", result);
 
     // Day 2b
-    print("Result day 2b: {}\n", day2b(path));
+    //print("Result day 2b: {}\n", day2b(path));
+
+    // Day 5a
+    auto path5a = "../data/inp_d5.txt";
+    auto result5a = day5a(path5a);
+    print("Result day 5a: {}\n", result5a);
+
     return 0;
+
+
 }

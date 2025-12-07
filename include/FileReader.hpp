@@ -26,6 +26,7 @@ std::string readFile(const std::string& path) {
         throw std::runtime_error("Blad podczas czytania pliku");
     }
 
+    file.close();
     return buffer;
 }
 
