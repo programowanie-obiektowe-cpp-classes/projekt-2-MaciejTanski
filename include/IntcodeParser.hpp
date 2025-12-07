@@ -9,7 +9,7 @@ auto intcodeParser(const std::string& input)
     return input | 
         std::views::split(',') | 
         std::views::transform([](auto&& str){
-            return std::stoi(std::string{str.data(), str.size()});
+            return std::stoll(std::string{str.data(), str.size()});
         }) | 
         std::ranges::to< std::vector >();
 }

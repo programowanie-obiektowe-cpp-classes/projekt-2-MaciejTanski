@@ -11,6 +11,8 @@
 #include "IntcodeParser.hpp"
 #include "Day2.hpp"
 #include "Day5.hpp"
+#include "Day9.hpp"
+
 using namespace std;
 
 int main() {
@@ -26,7 +28,14 @@ int main() {
     auto path5 = "../data/inp_d5.txt";
     day5a(path5);//odp 13787043
  */
-    day5b("../data/inp_d5.txt");
+    //day5b("../data/inp_d5.txt"); //odp 3892695
+
+    // Day 9a
+    day9tests();
+
+    day9a();// odp 3638931938
+
+    // day 9b
     
     return 0;
 
